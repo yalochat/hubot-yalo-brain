@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/yalochat/hubot-yalo-brain#readme",
   "devDependencies": {
+    "bucker": "^1.1.1",
     "mongoose": "^4.9.4"
   },
   "dependencies": {
