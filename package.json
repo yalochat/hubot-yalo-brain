@@ -1,0 +1,26 @@
+{
+  "name": "hubot-yalo-brain",
+  "version": "1.0.0",
+  "description": "Overwrite set & get methods on brain to persist on MongoDB instead of memory.",
+  "main": "src/hubot-yalo-brain.coffee",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yalochat/hubot-yalo-brain.git"
+  },
+  "keywords": [
+    "yalochat",
+    "mongodb",
+    "brain",
+    "hubot",
+    "hubot-brain"
+  ],
+  "author": "eng@yalochat.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yalochat/hubot-yalo-brain/issues"
+  },
+  "homepage": "https://github.com/yalochat/hubot-yalo-brain#readme"
+}
