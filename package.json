@@ -22,5 +22,11 @@
   "bugs": {
     "url": "https://github.com/yalochat/hubot-yalo-brain/issues"
   },
-  "homepage": "https://github.com/yalochat/hubot-yalo-brain#readme"
+  "homepage": "https://github.com/yalochat/hubot-yalo-brain#readme",
+  "devDependencies": {
+    "mongoose": "^4.9.4"
+  },
+  "dependencies": {
+    "mongoose": "^4.9.4"
+  }
 }
