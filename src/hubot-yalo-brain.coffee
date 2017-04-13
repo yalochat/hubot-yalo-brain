@@ -1,40 +1,61 @@
-'use strict'
+# Description:
+#   hubot-yalo-brain
+#   Integrate MongoDB to persist data through mongoose.
+#   Overwrite set and get methods. Now these return a Promise
+#   instead of a value to handle async work.
+#
+# Dependencies:
+#   "mongoose": "^4.0.0"
+#
+# Configuration:
+#   MONGODB_URL
+#
+# Author:
+#   Yalochat <eng@yalochat.com>
 
+'use strict'
+{EventEmitter} = require 'events'
 mongoose = require 'mongoose'
+Promise = global.Promise
+
+class YaloBrain extends EventEmitter
+  constructor: (robot) ->
+  #Our own Brain, ignoring all methods on Hubot Brain.
 
 module.exports = (robot) ->
-    mongoUrl =  process.env.MONGODB_URL or
+  mongoUrl =  process.env.MONGODB_URL or
                 'mongodb://localhost/hubot-yalo-brain'
-    mongoose.connect mongoUrl
-    mongoose.Promise = global.Promise
+  mongoose.connect mongoUrl
+  mongoose.Promise = Promise
 
-    robot.hear /Hi (.*)/i, (response) ->
-        robot.brain.set 'testkey', response.match[1], (error, result) ->
-            console.log result
+  mongoose.connection.on 'error', (error) ->
+    throw error if error
 
-        robot.brain.get 'testkey', (error, result) ->
-            console.log result
-
-
-    mongoose.connection.on 'open', ->        
-        userDataSchema = mongoose.Schema
-            key: String
-            data: mongoose.Schema.Types.Mixed
+  mongoose.connection.on 'open', ->
+    robot.brain = new YaloBrain
+    userDataSchema = mongoose.Schema
+      key: String
+      data: mongoose.Schema.Types.Mixed
         
-        UserDataSchema = mongoose.model 'UserData', userDataSchema
+    UserDataSchema = mongoose.model 'UserData', userDataSchema
 
-        robot.brain.get = (key, reply) ->
-            UserDataSchema.findOne {key}, (error, result)->
-                if reply
-                    reply error, result
+    robot.brain.get = (key) ->
+      return new Promise (resolve, reject)->
+        UserDataSchema.findOne {key}, (error, result)->
+          reject error if error
+          reject 'not-found' if not result
+          resolve result.data if result
                 
-        robot.brain.set = (key, data, reply) ->
-            robot.brain.get key, (error, userData) ->
-                if not userData
-                    userData = new UserDataSchema {key}
-                userData.data =  data
+    robot.brain.set = (key, data) ->
+      return new Promise (resolve, reject)->
+        UserDataSchema.findOne {key}, (error, userData)->
+          userData = new UserDataSchema {key} if not userData
+          userData.data =  data
 
-                savePromise = userData.save()
-                savePromise.then (result) ->
-                    if reply
-                        reply null, result
+          savePromise = userData.save()
+          savePromise.then (result) ->
+            resolve result
+              
+          savePromise.catch (reason) ->
+            reject reason
+            

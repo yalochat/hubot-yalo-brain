@@ -4,7 +4,7 @@
   "description": "Overwrite set & get methods on brain to persist on MongoDB instead of memory.",
   "main": "src/hubot-yalo-brain.coffee",
   "scripts": {
-    "test": "npm test"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -23,13 +23,18 @@
     "url": "https://github.com/yalochat/hubot-yalo-brain/issues"
   },
   "homepage": "https://github.com/yalochat/hubot-yalo-brain#readme",
-  "devDependencies": {
+  "devDependencies": {    
     "bucker": "^1.1.1",
+    "coffee-script": "^1.12.5",
     "gulp": "^3.9.1",
     "gulp-cli": "^1.2.2",
+    "gulp-mocha": "^4.0.0",
+    "hubot": "^2.19.0",
+    "hubot-test-helper": "^1.5.1",
+    "mocha": "^3.2.0",
     "mongoose": "^4.9.4"
   },
-  "dependencies": {
+  "dependencies": {    
     "mongoose": "^4.9.4"
   }
 }
